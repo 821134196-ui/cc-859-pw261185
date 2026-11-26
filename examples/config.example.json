@@ -1,0 +1,23 @@
+{
+  "source_a": { "name": "旧库 A", "dsn": "/data/old_relational.db" },
+  "source_b": { "name": "新库 B", "dsn": "/data/new_relational.db" },
+  "segment_count": 8,
+  "tables": [
+    {
+      "name": "orders",
+      "business_key": ["order_no"],
+      "segment_count": 16,
+      "version_column": "version",
+      "updated_at_column": "updated_at",
+      "event_log": {
+        "table": "sync_events",
+        "seq_column": "seq",
+        "segment_column": "segment"
+      },
+      "columns": {
+        "ratio": { "abs_tolerance": "1e-9" },
+        "amount": { "strict_precision": false }
+      }
+    }
+  ]
+}

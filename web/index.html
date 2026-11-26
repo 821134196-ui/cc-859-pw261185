@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Relocheck · 关系库切换校对台</title>
+<link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+<header class="topbar">
+  <div class="brand">
+    <div class="logo">R</div>
+    <div>
+      <h1>Relocheck 校对台</h1>
+      <p class="subtitle">关系库切换 · 业务键对齐 · 类型感知 · 可判定性协议</p>
+    </div>
+  </div>
+  <div class="conn-chips" id="connChips"></div>
+</header>
+
+<main class="layout">
+  <!-- Control deck -->
+  <section class="card controls">
+    <div class="control-group">
+      <button id="btnRunLive" class="btn btn-primary">▶ 新建实时校对</button>
+      <button id="btnRunSnapshot" class="btn">📷 冻结写入并做快照一致校对</button>
+      <label class="check"><input type="checkbox" id="optStrict" /> 严格数值精度（标度不一致判为差异）</label>
+    </div>
+    <div class="control-group writer" id="writerControls">
+      <span class="writer-state" id="writerState"><span class="dot"></span><span id="writerStateText">写入器 …</span></span>
+      <button id="btnWriterToggle" class="btn btn-ghost">暂停持续写入</button>
+      <button id="btnBurst" class="btn btn-warn">⚡ 制造一次复制延迟并校对</button>
+      <button id="btnReset" class="btn btn-ghost" title="重建演示库与植入差异">↺ 重置演示数据</button>
+    </div>
+  </section>
+
+  <!-- Overall verdict -->
+  <section id="overallBanner" class="banner hidden"></section>
+
+  <!-- Stat tiles + composition bar -->
+  <section class="card summary">
+    <div class="tiles" id="tiles"></div>
+    <div class="composition">
+      <div class="comp-bar" id="compBar" role="img" aria-label="键段判定构成"></div>
+      <div class="comp-legend" id="compLegend"></div>
+    </div>
+  </section>
+
+  <!-- Schema drift -->
+  <section id="driftPanel" class="card drift hidden">
+    <h3>结构 / 精度漂移</h3>
+    <div id="driftList"></div>
+  </section>
+
+  <!-- Segment board -->
+  <section class="card">
+    <div class="section-head">
+      <h2>① 分段定位 <span class="hint">先看哪些键段相同 / 有差异 / 不可判定，点击键段展开行级证据</span></h2>
+      <select id="historyRuns" title="历史校对运行"></select>
+    </div>
+    <div id="segmentBoards"></div>
+  </section>
+
+  <!-- Detail -->
+  <section id="detailPanel" class="card detail hidden">
+    <div class="detail-head">
+      <div>
+        <h2 id="detailTitle">② 行级证据</h2>
+        <div id="detailVerdictLine" class="detail-verdict-line"></div>
+      </div>
+      <div class="detail-actions">
+        <button id="btnSegmentBurst" class="btn btn-warn btn-sm">⚡ 向此段突发写入</button>
+        <button id="btnRecheck" class="btn btn-primary btn-sm">↻ 延期复核此段</button>
+        <button id="btnCloseDetail" class="btn btn-ghost btn-sm">关闭</button>
+      </div>
+    </div>
+    <div id="detailBody"></div>
+  </section>
+
+  <footer class="foot">
+    比较在服务端以类型化值完成：NULL 独立成类、精确数值走 Decimal、浮点保留完整二进制表示；
+    字符串只用于渲染，从不用于判定相等。
+  </footer>
+</main>
+
+<div id="toast" class="toast hidden"></div>
+<script src="/app.js"></script>
+</body>
+</html>

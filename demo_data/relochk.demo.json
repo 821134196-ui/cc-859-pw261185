@@ -1,0 +1,26 @@
+{
+  "source_a": {
+    "name": "旧库 A",
+    "dsn": "/workspace/demo_data/old_relational.db"
+  },
+  "source_b": {
+    "name": "新库 B",
+    "dsn": "/workspace/demo_data/new_relational.db"
+  },
+  "tables": [
+    {
+      "name": "orders",
+      "business_key": [
+        "order_no"
+      ],
+      "segment_count": 8,
+      "version_column": "version",
+      "updated_at_column": "updated_at",
+      "event_log": {
+        "table": "sync_events",
+        "seq_column": "seq",
+        "segment_column": "segment"
+      }
+    }
+  ]
+}
